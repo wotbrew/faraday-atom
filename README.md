@@ -56,14 +56,14 @@ Use `create-table!` to create a table which will be the durable store for your a
     :atom/id))
 
 ;; Creates the table with a default read/write throughput of 8/8.
-(create-table! table-client)
+(dynamo/create-table! table-client)
 ```
 
 Use `item-atom` to get an atom for a dynamo item.
 
 ```clojure
 ;;this will get me an atom implementation for the item given by the key :foo.
-(def foo-atom (item-atom table-client :foo))
+(def foo-atom (dynamo/item-atom table-client :foo))
 ```
 
 Use `swap!` and `deref!` and `reset!` as you normally would. An exception will be raised for errors thrown by faraday 
