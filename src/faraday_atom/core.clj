@@ -168,7 +168,14 @@
 
 (defn item-atom
   "Returns a clojure.lang.IAtom/IDeref that supports atomic state transition via conditional puts on a single dynamo item.
-  In order to use an atom, get started by creating a compatible table via `create-table!` or `ensure-table!`."
+  In order to use an atom, get started by creating a compatible table via `create-table!` or `ensure-table!`.
+
+  opts:
+  - `:cas-sleep-ms` the amount of time to wait in the case of contention with other CAS operations (default 500ms)
+  - `:cas-timeout-ms` the amount of time that in the case of contention you are willing to retry for.
+      if this elapses the `:cas-timeout-val` is returned instead of the result of the `swap!`.
+      If you want to retry for ever, use `nil`. (default `nil`)
+  - `:cas-timeout-val` the value to return if we timeout due to CAS contention (default `nil`)."
   ([table-client key]
    (item-atom table-client key nil))
   ([table-client key opts]

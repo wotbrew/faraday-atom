@@ -187,7 +187,7 @@
   the result. Returns the result."
   ([table-client key f]
    (swap-item!* table-client key f
-                (:cas-sleep-ms table-client)
+                (:cas-sleep-ms table-client *default-cas-sleep-ms*)
                 (:cas-timeout table-client)
                 (:cas-timeout-val table-client)))
   ([table-client key f & args]

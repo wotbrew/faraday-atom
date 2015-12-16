@@ -58,8 +58,9 @@ Use `item-atom` to get an atom for a dynamo item.
 (def foo-atom (item-atom table-client :foo))
 ```
 
-Use `swap!` and `deref!` and `reset!` as you normally would. An exception will be raised for errors with thrown by faraday 
-or amazon except `ConditionalCheckFailedException` which is retried after a user configurable sleep period.
+Use `swap!` and `deref!` and `reset!` as you normally would. An exception will be raised for errors thrown by faraday 
+or amazon except `ConditionalCheckFailedException` which is retried after a user configurable sleep period. To configure 
+the retry parameters see the `item-atom` docstring.
 
 ```clojure
 (reset! foo-atom #{1 2 3})
