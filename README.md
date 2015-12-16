@@ -2,9 +2,9 @@
 
 *An atom implementation for Amazon DynamoDB backed by [faraday](http://github.com/taoensso/faraday).*
 
-- Atomic context around a single dynamo item
-- Durable atom, persists after restarts
-- Transitions via CAS using dynamo's conditional put, safe for concurrent updates
+- Atomic context around a single dynamo item.
+- Durable atom, persists after restarts.
+- Transitions via CAS using dynamo's conditional put, safe for concurrent updates.
 - Encodes data such that all edn data is supported yet indexes are still possible.
 - Due to encoding the console is still usable and your data is human readable, though byte-arrays are also supported.
 
