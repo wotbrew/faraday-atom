@@ -23,7 +23,7 @@ As it is of course much slower than a local atom you want to use this for state 
 
 ## Why not zookeeper?
 
-Zookeeper is the obvious candidate for the implementing the atom model and it has been done in [avout](http://github.com/liebke/avout).
+Zookeeper is the obvious candidate for implementing the atom model as seen in [avout](http://github.com/liebke/avout).
 
 Dynamo is better suited for large amounts of state that needs strong durability and availability. You can represent an unlimited amount of atoms for a single table
 so you can use it for database level use cases. 
