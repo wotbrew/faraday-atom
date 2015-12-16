@@ -1,6 +1,6 @@
 # faraday-atom
 
-*An atom implementation for Amazon DynamoDB backed by [faraday](http://github.com/taoensso/faraday).*
+*An atom implementation for Amazon DynamoDB backed by [faraday](https://github.com/ptaoussanis/faraday).*
 
 - Atomic context around a single dynamo item.
 - Durable atom, persists after restarts.
