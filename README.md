@@ -1,0 +1,84 @@
+# faraday-atom
+
+*An atom implementation for Amazon DynamoDB backed by [faraday](http://github.com/taoensso/faraday).*
+
+- Atomic context around a single dynamo item
+- Durable atom, persists after restarts
+- Transitions via CAS using dynamo's conditional put, safe for concurrent updates
+- Encodes data such that all edn data is supported yet indexes are still possible.
+
+Useful where you want to use atom semantics for state that is potentially shared across many machines, or needs to be
+durable. As it is of course much slower than a local atom you want to use this for state that perhaps changes 10 times a second
+rather than 1000 times.
+
+## Usage
+
+Include in your lein `project.clj`
+
+```clojure
+[mixradio/faraday-atom "0.1.0"]
+```
+
+Require `faraday-atom.core` to get started
+
+```clojure
+(require '[faraday-atom.core :as dynamo])
+```
+
+Use `create-table!` to create a table which will be the durable store for your atoms.
+
+```clojure
+(def client-opts
+  {;;; For DDB Local just use some random strings here, otherwise include your
+   ;;; production IAM keys:
+   :access-key "<AWS_DYNAMODB_ACCESS_KEY>"
+   :secret-key "<AWS_DYNAMODB_SECRET_KEY>"
+
+   ;;; You may optionally override the default endpoint if you'd like to use DDB
+   ;;; Local or a different AWS Region (Ref. http://goo.gl/YmV80o), etc.:
+   ;; :endpoint "http://localhost:8000"                   ; For DDB Local
+   ;; :endpoint "http://dynamodb.eu-west-1.amazonaws.com" ; For EU West 1 AWS region
+  })
+  
+(def table-client 
+  (dynamo/table-client client-opts
+    ;;the name of the table as a keyword
+    :test-atom-table
+    ;;this is the key we will use to store atom identity in the table.
+    :atom/id))
+
+;; Creates the table with a default read/write throughput of 8/8.
+(create-table! table-client)
+```
+
+Use `item-atom` to get an atom for a dynamo item.
+
+```clojure
+;;this will get me an atom implementation for the item given by the key :foo.
+(def foo-atom (item-atom table-client :foo))
+```
+
+Use `swap!` and `deref!` and `reset!` as you normally would. An exception will be raised for errors with thrown by faraday 
+or amazon except `ConditionalCheckFailedException` which is retried after a user configurable sleep period.
+
+```clojure
+(reset! foo-atom #{1 2 3})
+;; => #{1 2 3}
+
+@foo-atom
+;; => #{1 2 3}
+
+(swap! foo-atom conj 4)
+;; => #{1 2 3 4}
+
+@foo-atom
+;; => #{1 2 3 4}
+```
+
+Many other helper operations for doing batch reads and puts to atom tables are provided e.g `find-items`, `put-items!`.
+
+## License
+
+Copyright © 2015 MixRadio
+
+[faraday-atom is released under the 3-clause license ("New BSD License" or "Modified BSD License").](http://github.com/mixradio/faraday-atom/blob/master/LICENSE)
