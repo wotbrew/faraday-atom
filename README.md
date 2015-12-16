@@ -8,6 +8,8 @@
 - Encodes data such that all edn data is supported yet indexes are still possible.
 - Due to encoding the console is still usable and your data is human readable, though byte-arrays are also supported.
 
+API docs can be found [here](http://mixradio.github.io/faraday-atom)
+
 ## Why use atoms beyond a single process?
 
 Using a durable atom as your state primitive is of course useful to support clojure's epochal time model at scale in distributed systems.
