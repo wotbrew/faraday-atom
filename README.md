@@ -7,9 +7,17 @@
 - Transitions via CAS using dynamo's conditional put, safe for concurrent updates
 - Encodes data such that all edn data is supported yet indexes are still possible.
 
-Useful where you want to use atom semantics for state that is potentially shared across many machines, or needs to be
-durable. As it is of course much slower than a local atom you want to use this for state that perhaps changes 10 times a second
-rather than 1000 times.
+
+## Why use atoms beyond a single process?
+
+Using a durable atom as your state primitive is of course useful to support clojure's epochal time model at scale in distributed systems.
+It surfaces the notion of state as snapshots in time that transition via pure functions. So if you care about keeping more of your code pure this library can help!
+
+It can enable certain guarantees about the correctness of your system by helping avoid race conditions and performing co-ordination services.
+
+**faraday-atom** gives you atom semantics for state that is shared across many machines, or needs to be durable. 
+
+As it is of course much slower than a local atom you want to use this for state that perhaps changes 10 times a second rather than 1000 times.
 
 ## Usage
 
