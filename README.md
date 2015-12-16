@@ -28,7 +28,7 @@ so you can use it for database level use cases.
 
 Dynamo can scale to effectively unlimited throughput, and its easy to do so (amazon does all the work!).
 
-Dynamo is very convenient from an operational perspective and therefore may be a more cost-effective solution if you do not already have zookeeper deployed
+Dynamo is very convenient from an operational perspective and therefore may be a more cost-effective solution, and easy solution if you do not already have zookeeper deployed
 and running.
 
 On the other hand Zookeeper will likely be faster in terms of latency and can be used to implement more features like watches.
