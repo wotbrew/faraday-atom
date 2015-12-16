@@ -6,6 +6,7 @@
 - Durable atom, persists after restarts
 - Transitions via CAS using dynamo's conditional put, safe for concurrent updates
 - Encodes data such that all edn data is supported yet indexes are still possible.
+- Due to encoding amazons console is still usable and your data is human readable, though byte-arrays are also supported.
 
 ## Why use atoms beyond a single process?
 
@@ -20,17 +21,17 @@ As it is of course much slower than a local atom you want to use this for state 
 
 ## Why not zookeeper?
 
-Zookeeper is the obvious candidate for the implementing that atom model and it has been done in [avout](http://github.com/liebke/avout).
+Zookeeper is the obvious candidate for the implementing the atom model and it has been done in [avout](http://github.com/liebke/avout).
 
 Dynamo is better suited for large amounts of state that needs strong durability and availability. You can represent an unlimited amount of atoms for a single table
 so you can use it for database level use cases. 
 
 Dynamo can scale to effectively unlimited throughput, and its easy to do so (amazon does all the work!).
 
-Dynamo also is very convenient from an operational perspective and therefore may be a more cost-effective solution if you do not already have zookeeper deployed
+Dynamo is very convenient from an operational perspective and therefore may be a more cost-effective solution if you do not already have zookeeper deployed
 and running.
 
-On the other hand Zookeeper will likely be faster in terms of latency and can be used to implement more features like watches (which aren't supported here!)
+On the other hand Zookeeper will likely be faster in terms of latency and can be used to implement more features like watches.
 
 ## Usage
 
