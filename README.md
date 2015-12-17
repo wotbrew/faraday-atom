@@ -1,10 +1,10 @@
 # faraday-atom
 
-*An atom implementation for Amazon DynamoDB backed by [faraday](http://github.com/taoensso/faraday).*
+*An atom implementation for Amazon DynamoDB backed by [faraday](https://github.com/ptaoussanis/faraday).*
 
-- Atomic context around a single dynamo item
-- Durable atom, persists after restarts
-- Transitions via CAS using dynamo's conditional put, safe for concurrent updates
+- Atomic context around a single dynamo item.
+- Durable atom, persists after restarts.
+- Transitions via CAS using dynamo's conditional put, safe for concurrent updates.
 - Encodes data such that all edn data is supported yet indexes are still possible.
 - Due to encoding the console is still usable and your data is human readable, though byte-arrays are also supported.
 
@@ -23,15 +23,14 @@ As it is of course much slower than a local atom you want to use this for state 
 
 ## Why not zookeeper?
 
-Zookeeper is the obvious candidate for the implementing the atom model and it has been done in [avout](http://github.com/liebke/avout).
+Zookeeper is the obvious candidate for implementing the atom model as seen in [avout](http://github.com/liebke/avout).
 
 Dynamo is better suited for large amounts of state that needs strong durability and availability. You can represent an unlimited amount of atoms for a single table
 so you can use it for database level use cases. 
 
 Dynamo can scale to effectively unlimited throughput, and its easy to do so (amazon does all the work!).
 
-Dynamo is very convenient from an operational perspective and therefore may be a more cost-effective solution, and easy solution if you do not already have zookeeper deployed
-and running.
+Dynamo is very convenient from an operational perspective and therefore may be a more cost-effective and easy solution if you do not already have zookeeper deployed and running.
 
 On the other hand Zookeeper will likely be faster in terms of latency and can be used to implement more features like watches.
 
