@@ -63,14 +63,14 @@
 (defn read-key
   "Reads an encoded dynamo key"
   [x]
-  (if (and (vector? x) (= (first x) ::key))
+  (if (and (vector? x) (= (first x) :atom/key))
     (second x)
     x))
 
 (defn native-key
   [x]
   (if (and (coll? x) (empty? x))
-    [::key x]
+    [:atom/key x]
     x))
 
 (defn write-key
@@ -93,9 +93,9 @@
        (if (contains? value key-name)
          (-> value
              (dissoc key-name)
-             (assoc ::key (get value key-name)))
+             (assoc :atom/key (get value key-name)))
          value))
-     {::value value})))
+     {:atom/value value})))
 
 (defn add-key
   "Writes the (encoded) key to the value"
@@ -142,10 +142,10 @@
   from the prepared map"
   [read-value key-name]
   (when read-value
-    (if (contains? read-value ::value)
-      (::value read-value)
-      (cond-> (dissoc read-value (native-key key-name) ::key ::version)
-              (contains? read-value ::key) (assoc key-name (get read-value ::key))))))
+    (if (contains? read-value :atom/value)
+      (:atom/value read-value)
+      (cond-> (dissoc read-value (native-key key-name) :atom/key :atom/version)
+              (contains? read-value :atom/key) (assoc key-name (get read-value :atom/key))))))
 
 (defn cas-put-item!
   "Overwrites the value under `key` only if
@@ -153,7 +153,7 @@
    - There is not data currently under `key`"
   [table-client key value version]
   (let [{:keys [client-opts table key-name]} table-client
-        version-key (write-key ::version)]
+        version-key (write-key :atom/version)]
     (try
       (far/put-item client-opts table (-> (prepare-value value key-name)
                                           write-value
@@ -175,7 +175,7 @@
      timeout-val
      (let [{:keys [key-name]} table-client
            value (find-raw-item table-client key)
-           version (::version value)
+           version (:atom/version value)
            item (f (read-item value key-name))]
        (if (cas-put-item! table-client key item version)
          item
@@ -192,4 +192,3 @@
                 (:cas-timeout-val table-client)))
   ([table-client key f & args]
    (swap-item! table-client key #(apply f % args))))
-
