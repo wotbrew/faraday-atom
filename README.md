@@ -39,7 +39,7 @@ On the other hand Zookeeper will likely be faster in terms of latency and can be
 Include in your lein `project.clj`
 
 ```clojure
-[mixradio/faraday-atom "0.1.0"]
+[mixradio/faraday-atom "0.2.0"]
 ```
 
 Require `faraday-atom.core` to get started
