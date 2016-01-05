@@ -170,25 +170,42 @@
   500)
 
 (defn swap-item!*
-  ([table-client key f sleep-ms timeout-ms timeout-val]
-   (if (and timeout-ms (<= 0 timeout-ms))
-     timeout-val
-     (let [{:keys [key-name]} table-client
-           value (find-raw-item table-client key)
-           version (:atom/version value)
-           item (f (read-item value key-name))]
-       (if (cas-put-item! table-client key item version)
-         item
-         (do (when sleep-ms (Thread/sleep sleep-ms))
-             (recur table-client key f sleep-ms (when timeout-ms (- timeout-ms sleep-ms)) timeout-val)))))))
+  ([table-client key f {:keys [cas-sleep-ms cas-timeout-ms cas-timeout-val discard-no-op?]
+                        :as options}]
+   (let [cas-sleep-ms (or cas-sleep-ms *default-cas-sleep-ms*)
+         discard-no-op? (if (some? discard-no-op?) discard-no-op? true)]
+     (if (and cas-timeout-ms (<= 0 cas-timeout-ms))
+       cas-timeout-val
+       (let [{:keys [key-name]} table-client
+             value (find-raw-item table-client key)
+             version (:atom/version value)
+             input (read-item value key-name)
+             result (f input)]
+         (cond
+           (and discard-no-op? (= input result))
+           result
+           (cas-put-item! table-client key result version)
+           result
+           :else (do (when cas-sleep-ms (Thread/sleep cas-sleep-ms))
+                     (recur table-client key f
+                            {:cas-sleep-ms cas-sleep-ms
+                             :cas-timeout-ms (when cas-timeout-ms
+                                               (- cas-timeout-ms cas-sleep-ms))
+                             :cas-timeout-val cas-timeout-val}))))))))
+
+(defn table-client->options
+  [table-client]
+  (select-keys
+    [:cas-sleep-ms
+     :cas-timeout
+     :cas-timeout-val
+     :discard-no-op?]
+    table-client))
 
 (defn swap-item!
   "Applies the function `f` and any `args` to the value currently under `key` storing
   the result. Returns the result."
   ([table-client key f]
-   (swap-item!* table-client key f
-                (:cas-sleep-ms table-client *default-cas-sleep-ms*)
-                (:cas-timeout table-client)
-                (:cas-timeout-val table-client)))
+   (swap-item!* table-client key f (table-client->options table-client)))
   ([table-client key f & args]
    (swap-item! table-client key #(apply f % args))))

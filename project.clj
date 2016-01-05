@@ -1,4 +1,4 @@
-(defproject mixradio/faraday-atom "0.2.1-SNAPSHOT"
+(defproject mixradio/faraday-atom "0.3.0-SNAPSHOT"
   :description "Provides a clojure.lang.IAtom for DynamoDB via faraday."
   :url "http://github.com/mixradio/faraday-atom"
   :license "https://github.com/mixradio/faraday-atom/blob/master/LICENSE"
