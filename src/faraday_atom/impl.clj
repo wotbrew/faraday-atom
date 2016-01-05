@@ -191,13 +191,14 @@
                             {:cas-sleep-ms cas-sleep-ms
                              :cas-timeout-ms (when cas-timeout-ms
                                                (- cas-timeout-ms cas-sleep-ms))
-                             :cas-timeout-val cas-timeout-val}))))))))
+                             :cas-timeout-val cas-timeout-val
+                             :discard-no-op? discard-no-op?}))))))))
 
 (defn table-client->options
   [table-client]
   (select-keys
     [:cas-sleep-ms
-     :cas-timeout
+     :cas-timeout-ms
      :cas-timeout-val
      :discard-no-op?]
     table-client))
