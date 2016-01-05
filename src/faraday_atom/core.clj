@@ -166,6 +166,12 @@
     (put-item! table-client key v)
     v))
 
+(def deref-printer (get-method print-method IDeref))
+
+(defmethod print-method ItemAtom
+  [x writer]
+  (deref-printer x writer))
+
 (defn item-atom
   "Returns a clojure.lang.IAtom/IDeref that supports atomic state transition via conditional puts on a single dynamo item.
   In order to use an atom, get started by creating a compatible table via `create-table!` or `ensure-table!`.
