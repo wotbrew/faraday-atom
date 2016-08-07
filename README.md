@@ -8,7 +8,7 @@
 - Encodes data such that all edn data is supported yet indexes are still possible.
 - Due to encoding the console is still usable and your data is human readable, though byte-arrays are also supported.
 
-API docs can be found [here](http://mixradio.github.io/faraday-atom)
+API docs can be found [here](http://danstone.github.io/faraday-atom)
 
 ## Why use atoms beyond a single process?
 
@@ -103,6 +103,4 @@ Many other helper operations for doing batch reads and puts to atom tables are p
 
 ## License
 
-Copyright © 2015 MixRadio
-
-[faraday-atom is released under the 3-clause license ("New BSD License" or "Modified BSD License").](http://github.com/mixradio/faraday-atom/blob/master/LICENSE)
+[faraday-atom is released under the 3-clause license ("New BSD License" or "Modified BSD License").](http://github.com/danstone/faraday-atom/blob/master/LICENSE)
